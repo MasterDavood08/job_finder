@@ -33,7 +33,7 @@ export class UserRepository extends Repository<User> {
         await this.update({ email }, {
             // activationCode: `${Math.floor(Math.random() * (90000)) + 10000}`,
             activationCode: code,
-            activationCodeExpiresAt: moment().add(1, 'minutes'),
+            activationCodeExpiresAt: moment().add(10, 'minutes'),
         })
 
         return code

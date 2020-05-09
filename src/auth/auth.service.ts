@@ -9,11 +9,13 @@ import { EmployerLoginDto } from './dto/employer-login.dto';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { Role } from 'src/core/enums/role.enum';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
+        private readonly mailerService: MailerService,
         @InjectRepository(UserRepository)
         private userRepository: UserRepository,
         @InjectRepository(UserpasswordRepository)
@@ -152,9 +154,28 @@ export class AuthService {
         if (moment().isAfter(user.activationCodeExpiresAt) || !user.activationCodeExpiresAt) {
             const activationCode = await this.userRepository.createActivationCode(user.email);
             // send code via sms send error if fail
-            console.log(activationCode);
+            this.sendEmail(activationCode, user.email)
         }
 
     }
 
+    public sendEmail(activationCode: string, userEmail: string): void {
+        this
+            .mailerService
+            .sendMail({
+                to: userEmail, // List of receivers email address
+                from: 'davoodebi789@gmail.com', // Senders email address
+                subject: 'کد فعال سازی',
+                template: 'index', // The `.pug` or `.hbs` extension is appended automatically.
+                context: {  // Data to be sent to template engine.
+                    code: activationCode,
+                },
+            })
+            .then((success) => {
+                console.log(success)
+            })
+            .catch((err) => {
+                console.log(err)
+            });
+    }
 }
