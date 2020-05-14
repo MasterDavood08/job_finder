@@ -1,4 +1,4 @@
-import { Controller, Put, Body, UseGuards } from '@nestjs/common';
+import { Controller, Put, Body, UseGuards, Get } from '@nestjs/common';
 import { SeekersService } from './seekers.service';
 import { UpdateSeekerProfileDto } from './dto/update-seeker-profile.dto';
 import { IResponse } from 'src/core/interfaces/response.interface';
@@ -24,6 +24,19 @@ export class SeekersController {
 
         } catch (e) {
             return new ResponseError('SEEKER.UPDATE_ERROR', e)
+        }
+    }
+
+
+    @Get('/profile')
+    @Roles(Role.SEEKER)
+    async getSeekerProfile(@GetUser() user: IUserToken): Promise<IResponse> {
+        try {
+            const seeker = await this.seekersService.getSeekerProfile(user.id)
+            return new ResponseSuccess('SEEKER.GET_SEEKER', seeker)
+
+        } catch (e) {
+            return new ResponseError('SEEKER.GET_ERROR', e)
         }
     }
 }

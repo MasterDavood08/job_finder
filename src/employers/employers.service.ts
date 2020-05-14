@@ -14,10 +14,15 @@ export class EmployersService {
         private employerRepository: EmployerRepository
     ) { }
 
-    async updateSeekerProfile(user: IUserToken, employerData: UpdateEmployerProfileDto): Promise<Employer> {
+    async updateEmployerProfile(user: IUserToken, employerData: UpdateEmployerProfileDto): Promise<Employer> {
         await this.employerRepository.update(user.seekerOrEmployerId, employerData);
         const employer = await this.employerRepository.findOne(user.seekerOrEmployerId);
 
+        return employer
+    }
+
+    async getEmployerProfile(id: number): Promise<Employer> {
+        const employer = await this.employerRepository.findOne(id);
         return employer
     }
 

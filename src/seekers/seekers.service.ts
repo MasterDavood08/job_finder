@@ -21,6 +21,11 @@ export class SeekersService {
         return seeker
     }
 
+    async getSeekerProfile(id: number): Promise<Seeker> {
+        const seeker = await this.seekerRepository.findOne(id);
+        return seeker
+    }
+
     async assignUser(user: User): Promise<void> {
         await this.seekerRepository.save({ user })
     }

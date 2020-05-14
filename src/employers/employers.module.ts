@@ -7,6 +7,7 @@ import { EmployerRepository } from './employer.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([EmployerRepository])],
   controllers: [EmployersController],
-  providers: [EmployersService]
+  providers: [EmployersService],
+  exports: [EmployersService]
 })
 export class EmployersModule { }

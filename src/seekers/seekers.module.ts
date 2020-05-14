@@ -7,6 +7,7 @@ import { SeekerRepository } from './seeker.repository';
 @Module({
   imports: [TypeOrmModule.forFeature([SeekerRepository])],
   controllers: [SeekersController],
-  providers: [SeekersService]
+  providers: [SeekersService],
+  exports: [SeekersService]
 })
 export class SeekersModule { }

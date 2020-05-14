@@ -73,10 +73,10 @@ export class AuthController {
         }
     }
 
-    @Get('profile')
-    @UseGuards(AuthGuard('jwt'), RolesGuard)
-    @Roles('seeker', 'employer')
-    async profile(@GetUser() user: IUserToken): Promise<IResponse> {
-        return new ResponseSuccess("OK", new UserDto(user))
-    }
+    // @Get('profile')
+    // @UseGuards(AuthGuard('jwt'), RolesGuard)
+    // @Roles('seeker', 'employer')
+    // async profile(@GetUser() user: IUserToken): Promise<IResponse> {
+    //     return new ResponseSuccess("OK", new UserDto(user))
+    // }
 }

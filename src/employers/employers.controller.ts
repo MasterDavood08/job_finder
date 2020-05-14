@@ -1,4 +1,4 @@
-import { Controller, Put, Body, UseGuards } from '@nestjs/common';
+import { Controller, Put, Body, UseGuards, Get } from '@nestjs/common';
 import { EmployersService } from './employers.service';
 import { Roles } from 'src/core/decorators/role.decorator';
 import { Role } from 'src/core/enums/role.enum';
@@ -13,15 +13,29 @@ import { AuthGuard } from '@nestjs/passport';
 @UseGuards(AuthGuard('jwt'))
 export class EmployersController {
     constructor(private employersService: EmployersService) { }
+
     @Put('/profile')
     @Roles(Role.EMPLOYER)
-    async updateSeekerProfile(@GetUser() user: IUserToken, @Body() employerData: UpdateEmployerProfileDto): Promise<IResponse> {
+    async updateEmployerProfile(@GetUser() user: IUserToken, @Body() employerData: UpdateEmployerProfileDto): Promise<IResponse> {
         try {
-            const seeker = await this.employersService.updateSeekerProfile(user, employerData)
-            return new ResponseSuccess('SEEKER.UPDATED', seeker)
+            const employer = await this.employersService.updateEmployerProfile(user, employerData)
+            return new ResponseSuccess('EMPLOYER.UPDATED', employer)
 
         } catch (e) {
-            return new ResponseError('SEEKER.UPDATE_ERROR', e)
+            return new ResponseError('EMPLOYER.UPDATE_ERROR', e)
+        }
+    }
+
+
+    @Get('/profile')
+    @Roles(Role.EMPLOYER)
+    async getEmployerProfile(@GetUser() user: IUserToken): Promise<IResponse> {
+        try {
+            const employer = await this.employersService.getEmployerProfile(user.id)
+            return new ResponseSuccess('EMPLOYER.GET_EMPLOYER', employer)
+
+        } catch (e) {
+            return new ResponseError('EMPLOYER.GET_ERROR', e)
         }
     }
 }

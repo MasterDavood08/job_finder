@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { CreateUserDto } from 'src/auth/dto/create-user.dto';
@@ -51,5 +51,26 @@ export class UsersService {
             role: user.role
         }
         return token
+    }
+
+    async getUsersProfile(userId: number): Promise<any> {
+        const user = await this.userRepository.findOne(userId, { relations: ['seeker', 'employer'] });
+        if (!user) {
+            throw new NotFoundException('چنین کاربری وجود ندارد')
+        }
+
+        if (user.role === Role.SEEKER) {
+            const data = await this.seekersService.getSeekerProfile(user.seeker.id)
+            return {
+                role: Role.SEEKER,
+                profileData: data
+            }
+        } else {
+            const data = await this.employersService.getEmployerProfile(user.employer.id)
+            return {
+                role: Role.EMPLOYER,
+                profileData: data
+            }
+        }
     }
 }
