@@ -1,0 +1,463 @@
+{
+	"info": {
+		"_postman_id": "c6114bd4-0a32-43dc-985a-524677a1866c",
+		"name": "Job Finder",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Register User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"davood@gmail.com\",\n    \"isSeeker\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/auth/register",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "seeker login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cb7dfa94-4f20-48cf-8b38-f2289d4dc6bf",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var data = pm.response.json().data;\r",
+							"    pm.environment.set(\"tokenSeeker\", data.token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "davood@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						},
+						{
+							"key": "activationCode",
+							"value": "03663",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/auth/login/seeker",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						"login",
+						"seeker"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employer login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0147cb39-b655-44b3-98f3-8bef74ee5266",
+						"exec": [
+							"pm.test(\"Your test name\", function () {\r",
+							"    var data = pm.response.json().data;\r",
+							"    pm.environment.set(\"tokenEmployer\", data.token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "email",
+							"value": "davoodebrahimabadi08@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						},
+						{
+							"key": "activationCode",
+							"value": "40292",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/auth/login/employer",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"auth",
+						"login",
+						"employer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/users/1/profile",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"users",
+						"1",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "seeker update profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenSeeker}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fullName\":\"davood ebrahimi\",\n\t\"general\":\"about me\",\n\t\"contacts\":[\"0935\",\"email\"],\n\t\"experience\":[\"company A developer\"],\n\t\"tags\":[\"web\",\"nodejs\",\"js\"],\n\t\"education\":[\"golestan university\"],\n\t\"ksao\":[{\"name\":\"nodeJs\",\"description\":\"this is description\"}]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/seekers/profile",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"seekers",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "employer update profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"fullName\": \"amir\",\n    \"city\": \"gorgan\",\n    \"summary\": \"this is summery\",\n    \"contacts\":[\"0935\",\"email\"],\n    \"companyName\": \"amir company\",\n    \"companyUrl\": \"site\",\n    \"companyEmail\": \"amir@gmail.com\",\n    \"aboutCompany\": \"about company\",\n    \"companyAddress\": \"golestan gorgan\",\n    \"tags\": [\"web\",\"ui\",\"ux\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/employers/profile",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"employers",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create job by employer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n    \"jobTitle\": \"backend developer\",\n    \"jobDescription\": \"nodejs\",\n    \"salary\": \"20000\",\n    \"tags\": [\"backend\",\"web\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/jobs",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "apply job by seeker",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenSeeker}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/jobs/1/apply",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"jobs",
+						"1",
+						"apply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get jobs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/jobs",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get job by Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/jobs/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"jobs",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get seeker requests",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenSeeker}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/seekers/requests",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"seekers",
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get employer jobs",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/employers/jobs",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"employers",
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get employer job with offers",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/employers/jobs/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"employers",
+						"jobs",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update Job Offer For Employer",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenEmployer}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "message",
+							"value": "تایید شد تماس گرفته میشود",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{url}}/jobs/3/offers/1",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"jobs",
+						"3",
+						"offers",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
