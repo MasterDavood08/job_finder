@@ -74,7 +74,7 @@ async function paginateRepository<T>(
     const [items, total] = await repository.findAndCount({
         skip: limit * (page - 1),
         take: limit,
-        where: searchOptions
+        ...searchOptions
     });
 
     return createPaginationObject<T>(items, total, page, limit, dtoClass);

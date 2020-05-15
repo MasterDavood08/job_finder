@@ -1,4 +1,4 @@
-import { Controller, Put, Body, UseGuards, Get } from '@nestjs/common';
+import { Controller, Put, Body, UseGuards, Get, Post, Options, Query, Param, ParseIntPipe } from '@nestjs/common';
 import { EmployersService } from './employers.service';
 import { Roles } from 'src/core/decorators/role.decorator';
 import { Role } from 'src/core/enums/role.enum';
@@ -8,9 +8,11 @@ import { UpdateEmployerProfileDto } from './dto/update-employer-profile.dto';
 import { IResponse } from 'src/core/interfaces/response.interface';
 import { ResponseSuccess, ResponseError } from 'src/core/dto/response.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/core/guards/role.guard';
+import { IPaginationOptions } from 'src/core/pagination';
 
 @Controller('employers')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class EmployersController {
     constructor(private employersService: EmployersService) { }
 
@@ -38,4 +40,30 @@ export class EmployersController {
             return new ResponseError('EMPLOYER.GET_ERROR', e)
         }
     }
+
+    @Get('/jobs')
+    @Roles(Role.EMPLOYER)
+    async getEmployerJobs(@GetUser() user: IUserToken, @Query() options: IPaginationOptions): Promise<IResponse> {
+        try {
+            const jobs = await this.employersService.getEmployerJobs(user.id, options)
+            return new ResponseSuccess('EMPLOYER.GET_EMPLOYER_JOBS', jobs)
+
+        } catch (e) {
+            return new ResponseError('EMPLOYER.GET_EMPLOYER_JOBS_ERROR', e)
+        }
+    }
+
+
+    @Get('/jobs/:id')
+    @Roles(Role.EMPLOYER)
+    async getEmployerJob(@GetUser() user: IUserToken, @Param('id', ParseIntPipe) jobId: number): Promise<IResponse> {
+        try {
+            const jobs = await this.employersService.getEmployerJob(user.id, jobId)
+            return new ResponseSuccess('EMPLOYER.GET_EMPLOYER_JOB', jobs)
+
+        } catch (e) {
+            return new ResponseError('EMPLOYER.GET_EMPLOYER_JOB_ERROR', e)
+        }
+    }
+
 }

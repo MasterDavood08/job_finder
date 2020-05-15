@@ -1,6 +1,7 @@
-import { Entity, Column, OneToOne, JoinColumn, RelationId } from 'typeorm';
+import { Entity, Column, OneToOne, JoinColumn, RelationId, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/core/entity/base.entity';
 import { User } from 'src/users/user.entity';
+import { Offer } from 'src/jobs/offer/offer.entity';
 
 @Entity()
 export class Seeker extends BaseEntity {
@@ -59,5 +60,8 @@ export class Seeker extends BaseEntity {
     user: User;
     @RelationId((seeker: Seeker) => seeker.user)
     userId: number
+
+    @OneToMany(() => Offer, offer => offer.seeker)
+    requests: Offer[];
 
 }

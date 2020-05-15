@@ -1,4 +1,4 @@
-import { Controller, Put, Body, UseGuards, Get } from '@nestjs/common';
+import { Controller, Put, Body, UseGuards, Get, Query } from '@nestjs/common';
 import { SeekersService } from './seekers.service';
 import { UpdateSeekerProfileDto } from './dto/update-seeker-profile.dto';
 import { IResponse } from 'src/core/interfaces/response.interface';
@@ -8,9 +8,11 @@ import { Role } from 'src/core/enums/role.enum';
 import { GetUser } from 'src/core/decorators/user.decorator';
 import { IUserToken } from 'src/core/interfaces/user-token.interface';
 import { ResponseSuccess, ResponseError } from 'src/core/dto/response.dto';
+import { RolesGuard } from 'src/core/guards/role.guard';
+import { IPaginationOptions } from 'src/core/pagination';
 
 @Controller('seekers')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 export class SeekersController {
     constructor(private seekersService: SeekersService) { }
 
@@ -39,4 +41,19 @@ export class SeekersController {
             return new ResponseError('SEEKER.GET_ERROR', e)
         }
     }
+
+
+    @Get('/requests')
+    @Roles(Role.SEEKER)
+    async getjobRequest(@GetUser() user: IUserToken, @Query() options: IPaginationOptions): Promise<IResponse> {
+        try {
+            const requests = await this.seekersService.getJobRequests(user.seekerOrEmployerId, options)
+            return new ResponseSuccess('SEEKER.GET_Requests', requests)
+
+        } catch (e) {
+            return new ResponseError('SEEKER.GET_Requests_ERROR', e)
+        }
+    }
+
+
 }
